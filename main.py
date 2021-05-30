@@ -18,7 +18,6 @@ def parse_args() -> argparse.Namespace:
         help="Path to a folder containing images to process",
     )
     parser.add_argument(
-        "-d",
         "--destination",
         type=str,
         default="./output",
