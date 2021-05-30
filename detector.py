@@ -30,6 +30,9 @@ class Detector(LoggerMixin):
             if os.path.isdir(item_path) or not any(
                 item.lower().endswith(ext) for ext in Config.ALLOWED_EXTS
             ):
+                self.logger.info(
+                    f"Cannot process {item}. Unsupported extension"
+                )
                 continue
 
             image = cv2.imread(item_path)
@@ -52,7 +55,7 @@ class Detector(LoggerMixin):
                 continue
 
             # Slice out the pole(s) detected on the image and run through the
-            # tile detector
+            # angle calculator
             poles = self._slice_out_poles(image, predictions)
             angle_edge_pairs = [
                 self._tilt_detector.calculate_inclination(pole)
