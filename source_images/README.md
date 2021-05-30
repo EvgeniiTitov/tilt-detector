@@ -1,0 +1,1 @@
+Images to process could be put into this folder

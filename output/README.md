@@ -1,0 +1,1 @@
+Processing results will be saved in this folder unless stated otherwise
