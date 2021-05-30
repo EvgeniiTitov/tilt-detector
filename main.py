@@ -1,45 +1,43 @@
+import argparse
 import os
 
-import cv2
-
 from config import Config
+from detector import Detector
 from helpers import Logger
-from object_detector import YoloV4Detector
 
 
 logger = Logger(__name__, verbose=Config.VERBOSE)
 
 
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--path_to_folder", type=str, required=True)
+    parser.add_argument("-d", "--destination", type=str, default="./output")
+    parser.add_argument("--results_to_json", action="store_true")
+    return parser.parse_args()
+
+
+def validate_args(args: argparse.Namespace) -> None:
+    if not os.path.exists(args.path_to_folder):
+        raise FileNotFoundError("Failed to locate the provided folder")
+    if not os.path.exists(args.destination):
+        os.mkdir(args.destination)
+    return
+
+
 def main() -> int:
-    model = YoloV4Detector("object_detector")
+    args = parse_args()
+    validate_args(args)
+    logger.info("Arguments parsed and validated")
 
-    source = "test_images"
-    for item in os.scandir(source):
-        if item.is_dir() or not any(
-            item.name.lower().endswith(ext) for ext in Config.ALLOWED_EXTS
-        ):
-            continue
-        image = cv2.imread(item.path)
-        if image is None:
-            logger.error(f"Failed to open image: {item.name}")
-            continue
-        predictions = model.process_batch([image])[0]
+    detector = Detector(
+        source_folder=args.path_to_folder,
+        dest_folder=args.destination,
+        to_json=args.results_to_json,
+    )
+    detector.process_images_in_folder()
 
-        for prediction in predictions:
-            left, top, right, bot, _, conf, cls = prediction  # type: ignore
-            cv2.rectangle(image, (left, top), (right, bot), (0, 255, 0), 2)
-            cv2.putText(
-                image,
-                f"{cls}_{conf}",
-                (left, top + 15),
-                cv2.FONT_HERSHEY_SIMPLEX,
-                2,
-                (0, 0, 0),
-                2,
-            )
-        cv2.imshow("", image)
-        cv2.waitKey(0)
-
+    logger.info("All images have been processed")
     return 0
 
 

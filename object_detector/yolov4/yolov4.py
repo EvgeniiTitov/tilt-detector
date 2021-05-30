@@ -66,9 +66,7 @@ class YoloV4Detector(AbstractDetector, LoggerMixin):
         )
         self.logger.info(f"Model {model_name} initialized")
 
-    def process_batch(
-        self, batch_images: t.List[np.ndarray]
-    ) -> t.List[t.List[t.Union[float, int, None]]]:
+    def process_batch(self, batch_images: t.List[np.ndarray]) -> t.List[list]:
         # Preprocess data: resize, normalization, batch etc
         batch = self._preprocess_batch(batch_images)
         batch = torch.autograd.Variable(batch)

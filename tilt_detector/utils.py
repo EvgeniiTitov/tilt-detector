@@ -52,7 +52,6 @@ def calculate_angle(the_lines: list) -> float:
 
 
 def draw_lines_write_text(lines, image, angle):
-
     for line in lines:
         cv2.line(
             image,
@@ -61,14 +60,15 @@ def draw_lines_write_text(lines, image, angle):
             (0, 0, 255),
             2,
         )
-
     cv2.putText(
         image,
         str(angle),
         (int(image.shape[1] * 0.35), int(image.shape[0] * 0.95)),
         fontScale=1,
+        fontFace=cv2.FONT_HERSHEY_SIMPLEX,
         color=(255, 0, 255),
         lineType=3,
+        thickness=2,
     )
 
     return image
