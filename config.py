@@ -1,2 +1,3 @@
 class Config:
-    pass
+    VERBOSE = True
+    ALLOWED_EXTS = [".png", ".jpg", ".jpeg"]
