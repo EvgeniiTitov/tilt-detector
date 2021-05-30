@@ -4,7 +4,7 @@ import numpy as np
 
 
 def sigmoid(x):
-    return 1.0 / (np.exp(-x) + 1.)
+    return 1.0 / (np.exp(-x) + 1.0)
 
 
 def softmax(x):
@@ -92,13 +92,3 @@ def read_truths(lab_path):
         return truths
     else:
         return np.array([])
-
-
-def load_class_names(namesfile):
-    class_names = []
-    with open(namesfile, 'r') as fp:
-        lines = fp.readlines()
-    for line in lines:
-        line = line.rstrip()
-        class_names.append(line)
-    return class_names
